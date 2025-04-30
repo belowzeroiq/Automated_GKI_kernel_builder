@@ -279,6 +279,11 @@ jobs:
 
           UPLOAD_ZIP_NAME="Anykernel3_${{ env.kernelBranch }}_${{ env.BUILD_TIME }}.zip"
 
+          echo "UPLOAD_ZIP_NAME=$UPLOAD_ZIP_NAME" >> $GITHUB_ENV
+
+      - name: "Rename kernel zip"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        run: |
           mv "./${{ env.kernelDir }}/${{ env.kernelName }}/${{ env.kernelBranch }}_${{ env.BUILD_TIME }}.zip" \
              "./${{ env.kernelDir }}/${{ env.kernelName }}/${UPLOAD_ZIP_NAME}"
 
