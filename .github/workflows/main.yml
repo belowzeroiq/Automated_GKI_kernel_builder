@@ -5,28 +5,6 @@ env:
 
 on:
   workflow_dispatch:
-    inputs:
-      kernelSourceURL:
-        description: "Custom kernel source URL"
-        required: true
-        type: string
-        default: "https://android.googlesource.com/kernel/common"
-      kernelBranch:
-        description: "Kernel branch (default if empty)"
-        required: false
-        type: string
-        default: "android13-5.15-lts"
-      kernelDevice:
-        description: "Device (used for defconfig)"
-        required: true
-        type: string
-        default: "gki"
-      kernelSourceName:
-        description: "Kernel source name"
-        required: true
-        type: string
-        default: "common"
-
   schedule:
     - cron: '30 6 * * *'
 
@@ -59,7 +37,7 @@ jobs:
             }
           ]'
 
-          repos=$(echo "$repos" | jq --arg url "${{ github.event.inputs.kernelSourceURL }}" --arg branch "${{ github.event.inputs.kernelBranch }}" '.[].kernelSource.repo = $url | .[].kernelSource.branch = $branch')
+          repos=$(echo "$repos" | jq --arg url "https://android.googlesource.com/kernel/common" --arg branch "android13-5.15-lts" '.[].kernelSource.repo = $url | .[].kernelSource.branch = $branch')
 
           echo "repos<<EOF" >> $GITHUB_OUTPUT
           echo "$repos" >> $GITHUB_OUTPUT
@@ -76,12 +54,12 @@ jobs:
       matrix:
         repos: ${{ fromJSON(needs.Set-repos.outputs.repos) }}
     env:
-      kernelDir: ${{ github.event.inputs.kernelSourceName }}_${{ github.event.inputs.kernelDevice }}
-      kernelName: ${{ github.event.inputs.kernelSourceName }}
-      kernelRepo: ${{ github.event.inputs.kernelSourceURL }}
-      kernelBranch: ${{ github.event.inputs.kernelBranch }}
-      kernelDevice: ${{ github.event.inputs.kernelDevice }}
-      DEFCONFIG_NAME: ${{ github.event.inputs.kernelDevice }}_defconfig
+      kernelDir: common_gki
+      kernelName: common
+      kernelRepo: https://android.googlesource.com/kernel/common
+      kernelBranch: android13-5.15-lts
+      kernelDevice: gki
+      DEFCONFIG_NAME: gki_defconfig
 
     steps:
       - name: "✨ Setup workspace"
@@ -97,8 +75,8 @@ jobs:
         working-directory: ./${{ env.kernelDir }}
         run: |
           set -x
-          git clone --recursive --branch ${{ github.event.inputs.kernelBranch }} \
-            ${{ github.event.inputs.kernelSourceURL }} ${{ env.kernelName }} --depth=1
+          git clone --recursive --branch ${{ env.kernelBranch }} \
+            ${{ env.kernelSourceURL }} ${{ env.kernelName }} --depth=1
 
       - name: "💫 Get Toolchains"
         run: |
@@ -283,9 +261,10 @@ jobs:
 
       - name: "Rename kernel zip"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        env:
+          UPLOAD_ZIP_NAME: ${{ env.UPLOAD_ZIP_NAME }}
         run: |
-          mv "./${{ env.kernelDir }}/${{ env.kernelName }}/${{ env.kernelBranch }}_${{ env.BUILD_TIME }}.zip" \
-             "./${{ env.kernelDir }}/${{ env.kernelName }}/${UPLOAD_ZIP_NAME}"
+          mv "${{ env.kernelBranch }}_${{ env.BUILD_TIME }}.zip" "${UPLOAD_ZIP_NAME}"
 
       - name: "🚀 Upload to GitHub Release"
         uses: softprops/action-gh-release@v1
