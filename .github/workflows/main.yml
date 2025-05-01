@@ -5,7 +5,8 @@ env:
 
 on:
   schedule:
-    - cron: '20 17 * * *'
+    - cron: "0 0 * * 0" # Every Sunday at midnight
+  workflow_dispatch:
 
 jobs:
   Set-repos:
