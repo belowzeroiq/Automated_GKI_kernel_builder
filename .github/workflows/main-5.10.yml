@@ -57,7 +57,7 @@ jobs:
       kernelDir: common_gki
       kernelSourceURL: https://android.googlesource.com/kernel/common
       kernelName: common
-      kernelBranch: android13-5.10-lts
+      kernelBranch: android12-5.10-lts
       kernelDevice: gki
       DEFCONFIG_NAME: gki_defconfig
 
