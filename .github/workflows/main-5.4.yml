@@ -37,7 +37,7 @@ jobs:
             }
           ]'
 
-          repos=$(echo "$repos" | jq --arg url "https://android.googlesource.com/kernel/common" --arg branch "android13-5.15-lts" '.[].kernelSource.repo = $url | .[].kernelSource.branch = $branch')
+          repos=$(echo "$repos" | jq --arg url "https://android.googlesource.com/kernel/common" --arg branch "android11-5.4-lts" '.[].kernelSource.repo = $url | .[].kernelSource.branch = $branch')
 
           echo "repos<<EOF" >> $GITHUB_OUTPUT
           echo "$repos" >> $GITHUB_OUTPUT
