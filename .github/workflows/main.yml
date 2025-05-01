@@ -1,4 +1,4 @@
-name: "Automated GKI Kernel Builder"
+name: "Build Kernel GKI 5.15"
 
 env:
   OUT_DIR: "out"
