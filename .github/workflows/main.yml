@@ -55,8 +55,8 @@ jobs:
         repos: ${{ fromJSON(needs.Set-repos.outputs.repos) }}
     env:
       kernelDir: common_gki
+      kernelSourceURL: https://android.googlesource.com/kernel/common
       kernelName: common
-      kernelRepo: https://android.googlesource.com/kernel/common
       kernelBranch: android13-5.15-lts
       kernelDevice: gki
       DEFCONFIG_NAME: gki_defconfig
@@ -71,7 +71,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential bc curl flex cpio ccache rsync git zip dwarves libelf-dev gcc-aarch64-linux-gnu libssl-dev python3 clang lld llvm llvm-dev
 
-      - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
+      - name: "🌟 Clone kernel source => (${{ env.kernelSourceURL}})"
         working-directory: ./${{ env.kernelDir }}
         run: |
           set -x
@@ -276,7 +276,7 @@ jobs:
           tag_name: "${{ env.kernelBranch }}-${{ env.BUILD_TIME }}"
           body: |
             ✅ Kernel built for: `${{ env.kernelDevice }}`
-            🔗 Source: [${{ env.kernelRepo }}](${{ env.kernelRepo }})
+            🔗 Source: [${{ env.kernelSourceURL }}](${{ env.kernelSourceURL }})
             🌱 Branch: `${{ env.kernelBranch }}`
             🛠 Defconfig: `${{ env.DEFCONFIG_NAME }}`
             🧰 Clang: Greenforce latest
