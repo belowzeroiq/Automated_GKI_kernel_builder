@@ -161,11 +161,11 @@ jobs:
             args="$args CC=clang"
             echo "args=$args" >> $GITHUB_OUTPUT          
 
-      - name: "🧩 Apply Kernel Fixup Patch"
-        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
-        run: |
-          set -ex
-          echo 'KBUILD_CFLAGS += -Wno-default-const-init-unsafe' >> Makefile
+      # - name: "🧩 Apply Kernel Fixup Patch"
+      #   working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+      #   run: |
+      #     set -ex
+      #     echo 'KBUILD_CFLAGS += -Wno-default-const-init-unsafe' >> Makefile
 
       - name: "👍 Make defconfig"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
