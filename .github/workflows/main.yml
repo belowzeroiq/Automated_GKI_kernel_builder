@@ -165,8 +165,8 @@ jobs:
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         run: |
           set -ex
-          # echo 'KBUILD_CFLAGS += -Wno-default-const-init-unsafe' >> Makefile
-          # echo "Custom Makefile line added successfully"
+          echo 'KBUILD_CFLAGS += -Wno-default-const-init-unsafe' >> Makefile
+          echo "Custom Makefile line added successfully"
 
           log() {
             echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
